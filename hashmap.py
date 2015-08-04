@@ -5,24 +5,25 @@ class Hashmap(object):
         self.values = [None] * size
         self.size = size
 
-    def _hash(self, x):
+    @staticmethod
+    def _hash(x):
         return hash(x)
 
     def put(self, key, value):
-        if key == None:
+        if key is None:
             raise TypeError('key cannot be None')
         index = self._hash(key) % self.size
 
         step = 0
-        while self.keys[index] != None and self.keys[index] != key and step < self.size - 1:
-            #print 'step'
+        while self.keys[index] is not None and self.keys[index] != key and step < self.size - 1:
+            # print 'step'
             step += 1
             index = (index + 1) % self.size
 
         if step == self.size - 1:
             raise Exception('all spaces occupied')
 
-        if self.keys[index] == None:
+        if self.keys[index] is None:
             self.num_filled += 1
 
         self.keys[index] = key
@@ -36,7 +37,7 @@ class Hashmap(object):
 
         step = 0
         while self.keys[index] != key and step < self.size - 1:
-            #print 'step'
+            # print 'step'
             step += 1
             index = (index + 1) % self.size
         if step == self.size - 1:
@@ -60,7 +61,7 @@ class Hashmap(object):
             return False
 
     def __repr__(self):
-        non_empty = [(k, v) for k, v in zip(self.keys, self.values) if k != None]
+        non_empty = [(k, v) for k, v in zip(self.keys, self.values) if k is not None]
         string_list = []
         for k, v in non_empty:
             string_list.append(repr(k) + ': ' + repr(v))
@@ -70,5 +71,5 @@ class Hashmap(object):
         old_keys, old_values = self.keys, self.values
         self.__init__(size=self.size * 2)
         for k, v in zip(old_keys, old_values):
-            if k != None:
+            if k is not None:
                 self.put(k, v)
