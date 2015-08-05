@@ -73,3 +73,42 @@ class Hashmap(object):
         for k, v in zip(old_keys, old_values):
             if k is not None:
                 self.put(k, v)
+
+if __name__ == '__main__':
+    import timeit
+
+    setup = '''
+import random, string
+from hashmap import Hashmap
+
+hashmap = Hashmap()
+
+def random_string(length=10):
+    return ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(length))
+
+keys, values = map(random_string, [10] * 10), map(random_string, [5] * 10)
+
+for k, v in zip(keys, values):
+    hashmap[k] = v
+    assert hashmap[k] == v
+'''
+
+    print '10 keys: ', timeit.timeit("hashmap[random.choice(keys)]",  setup=setup)
+
+    setup = '''
+import random, string
+from hashmap import Hashmap
+
+hashmap = Hashmap()
+
+def random_string(length=10):
+    return ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(length))
+
+keys, values = map(random_string, [10] * 1000), map(random_string, [5] * 1000)
+
+for k, v in zip(keys, values):
+    hashmap[k] = v
+    assert hashmap[k] == v
+'''
+
+    print '1000 keys: ', timeit.timeit("hashmap[random.choice(keys)]",  setup=setup)
