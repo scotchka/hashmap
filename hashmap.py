@@ -1,19 +1,22 @@
 """
 Implementation of hash map without using built-in dictionary.
 """
+
+
 class Hashmap(object):
     """
     Hash map class
     """
+
     def __init__(self, size=8):
-        self.num_filled = 0 # keep track of how many slots are filled
+        self.num_filled = 0  # keep track of how many slots are filled
         self.keys = [None] * size
         self.values = [None] * size
-        self.size = size # number of slots
+        self.size = size  # number of slots
 
     @staticmethod
     def _hash(x):
-        return hash(x) # this can be replaced with another hashing function
+        return hash(x)  # this can be replaced with another hashing function
 
     def put(self, key, value):
         if key is None:
@@ -28,7 +31,7 @@ class Hashmap(object):
             index = (index + 1) % self.size
 
         if step == self.size - 1:
-            raise Exception('all spaces occupied') # this should never be raised!
+            raise Exception('all spaces occupied')  # this should never be raised!
 
         if self.keys[index] is None:
             self.num_filled += 1
@@ -36,7 +39,7 @@ class Hashmap(object):
         self.keys[index] = key
         self.values[index] = value
 
-        if self.num_filled > self.size * 0.67: # increase size of key, value lists when 2/3 full
+        if self.num_filled > self.size * 0.67:  # increase size of key, value lists when 2/3 full
             self.expand()
 
     def get(self, key):
@@ -49,7 +52,7 @@ class Hashmap(object):
             step += 1
             index = (index + 1) % self.size
         if step == self.size - 1:
-            raise Exception('key not found')
+            raise LookupError('key not found')
 
         return self.values[index]
 
@@ -68,7 +71,7 @@ class Hashmap(object):
                 return True
             else:
                 return False
-        except:
+        except LookupError:
             return False
 
     def __repr__(self):
@@ -81,13 +84,13 @@ class Hashmap(object):
     # double storage size by calling init method and re-populating
     def expand(self):
         old_keys, old_values = self.keys, self.values
-        self.__init__(size=self.size * 2) # re-initialize with twice as many slots
+        self.__init__(size=self.size * 2)  # re-initialize with twice as many slots
         for k, v in zip(old_keys, old_values):
             if k is not None:
                 self.put(k, v)
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     print 'creating empty hash map...'
     hashmap = Hashmap()
     print hashmap
@@ -104,6 +107,7 @@ if __name__ == '__main__':
     print 'show that lookup is o(1)...'
 
     import timeit
+
     print 'creating hash map of 10 random keys...'
     setup = '''
 import random, string
@@ -121,7 +125,7 @@ for k, v in zip(keys, values):
     assert hashmap[k] == v
 '''
 
-    print 'time for million random lookups: ', timeit.timeit("hashmap[random.choice(keys)]",  setup=setup)
+    print 'time for million random lookups: ', timeit.timeit("hashmap[random.choice(keys)]", setup=setup)
 
     print 'creating hash map of 1000 random keys...'
     setup = '''
@@ -140,4 +144,4 @@ for k, v in zip(keys, values):
     assert hashmap[k] == v
 '''
 
-    print 'time for million random lookups: ', timeit.timeit("hashmap[random.choice(keys)]",  setup=setup)
+    print 'time for million random lookups: ', timeit.timeit("hashmap[random.choice(keys)]", setup=setup)
